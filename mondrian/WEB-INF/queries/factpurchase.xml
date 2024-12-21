@@ -1,0 +1,91 @@
+<?xml version="1.0"?>
+<Schema name="factpurchase">
+<!--
+  == This software is subject to the terms of the Eclipse Public License v1.0
+  == Agreement, available at the following URL:
+  == http://www.eclipse.org/legal/epl-v10.html.
+  == You must accept the terms of that agreement to use this software.
+  ==
+  == Copyright (C) 2000-2005 Julian Hyde
+  == Copyright (C) 2005-2011 Pentaho and others
+  == All Rights Reserved.
+  -->
+
+<!-- Shared dimensions -->
+
+  
+
+<!-- Purchase -->
+<Cube name="pembelian" defaultMeasure="Total">
+  <!-- Use annotations to provide translations of this cube's caption and
+       description into German and French. Use of annotations in this manner is
+       experimental and unsupported; just for testing right now. -->
+  
+  <Table name="fact_purchase"/>
+ 
+  <Dimension name="Time" foreignKey="dateID">
+    <Hierarchy hasAll="true" allMemberName="All Times" primaryKey="dateID">
+      <Table name="time" />
+      <Level name="Tahun" column="Tahun" type="Numeric" uniqueMembers="true"
+          levelType="TimeYears"/>
+      <Level name="Bulan" column="Bulan" uniqueMembers="false" type="Numeric"
+          levelType="TimeMonths"/>
+      <Level name="Tanggal" column="Tanggal" uniqueMembers="false" type="Numeric"
+          levelType="TimeDays"/>
+      <!-- <Level name="Hari" column="hari" uniqueMembers="false" type="Varchar" -->
+          <!-- levelType="TimeDays"/> -->
+      <!-- <Level name="Order Date" column="OrderDate" uniqueMembers="false" type="date" -->
+          <!-- levelType="TimeOrderDates"/> -->
+    </Hierarchy>
+   
+  </Dimension>
+
+  <Dimension name="Product" foreignKey = "productID">
+    <Hierarchy hasAll="true" allMemberName="All Products" primaryKey ="productID">
+      <Table name="product" />
+      <Level name="Unit Price" column="unit_price"/>
+      <Level name="Product Name" column="product_name" />
+    </Hierarchy>
+  </Dimension>
+
+  <Dimension name="Supplier" foreignKey="supplierID">
+    <Hierarchy  hasAll="true" allMemberName="All Suppliers" primaryKey  = "supplierID">
+        <Table name="supplier"/>
+        <Level name="Account Number" column="account_number"/>
+        <Level name="Supplier Name" column="supplier_name"/>
+    </Hierarchy>
+  </Dimension>
+
+  <Dimension name="Employee" foreignKey="employeeID">
+    <Hierarchy  hasAll="true" allMemberName="All Employees" primaryKey  = "employeeID">
+        <Table name="employee"/>
+        <Level name="Name" column="name"/>
+        <Level name="Title" column="tittle"/>
+        <Level name="Gender" column="gender"/>
+    </Hierarchy>
+  </Dimension>
+
+  <Dimension name="Shipper" foreignKey="shipperID">
+    <Hierarchy  hasAll="true" allMemberName="All Shippers" primaryKey  = "shipperID">
+        <Table name="shipper"/>
+        <Level name="Shipper Name" column="shipper_name"/>
+    </Hierarchy>
+  </Dimension>
+    
+  
+
+  <Measure name="Amount" column="total_price" aggregator="sum"
+      formatString="Standard"/>
+  <Measure name="Quantity" column="order_quantity" aggregator="sum"
+      formatString="Standard"/>
+  
+ <!--  <Measure name="Purchase Count" column="film_id" aggregator="count"
+      formatString="#,###"/>
+  <Measure name="Customer Count" column="customer_id"
+      aggregator="distinct-count" formatString="#,###"/> -->
+  
+  
+  
+</Cube>
+
+</Schema>
